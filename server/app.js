@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 app.use(express.json())
 app.use(cors())
-app.use('/lockoutBot',require('./routes/questions'))
+app.use('/lockoutbot',require('./routes/data'))
 const port = 3001;
 const dotenv= require('dotenv');
 dotenv.config({path: './config.env'});

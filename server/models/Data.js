@@ -2,14 +2,16 @@ const mongoose =require('mongoose')
 
 //User Schema 
 const dataSchema=new mongoose.Schema({
-    
     code: {
         type: String,
         unique: true
     },
-    questions: {
-        type: Array,
-    },
+    questions: [{           
+            url : String,
+            points : Number,
+        }
+    ],
+    
     
 })
 
