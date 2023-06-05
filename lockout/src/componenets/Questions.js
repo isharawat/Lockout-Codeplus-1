@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import useFetch from './useFetch'
 import Componen from './Component';
 
-const Questions = () => {
+const Questions = ({r,rating}) => {
+
   const questions = useFetch("https://codeforces.com/api/problemset.problems?tags=implementation")
   const total = [];
   const x = {
@@ -35,6 +36,7 @@ const Questions = () => {
     3400: [], 
     3500: [], 
   };
+
   for(let q in questions) {
     let p = questions[q].rating;
     total.push(questions[q]);
@@ -44,14 +46,30 @@ const Questions = () => {
       x[pstr].push(questions[q]);  
     }
     else {
-      console.log(questions[q]);
+      //console.log(questions[q]);
     }
   }
-  console.log(x);
+ // console.log(x);
+  const allratings = rating;
+  const final=[]
+  for(let ratings in allratings) {
+    let pstr = String(allratings[ratings]);
+    if(pstr) {
+      const xlen = x[pstr].length;
+      const y = Math.floor((Math.random()*xlen*100 )%xlen);
+      const result = x[pstr][y];
+      final.push(result);
+    }
+  }
+const val={
+  code:r,
+  questions
+}
+  
   return (
     <>
       {
-      total.map((obj) => ( 
+      final.map((obj) => ( 
        <> 
         <Componen key = {obj.contestId + obj.index} obj = {obj}/>
      </> 
