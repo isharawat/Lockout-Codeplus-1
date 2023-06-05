@@ -62,7 +62,7 @@ const arr=[formvalues.rating1,formvalues.rating2,formvalues.rating3,formvalues.r
       ></input>
       <button>Create Contest</button>
       
-     </form>:<Questions code={p} rating={arr}/>}
+     </form>:<Questions codes={p} rating={arr}/>}
      <h1>Starting in 2 mins</h1>
     </div>
   );

@@ -5,6 +5,7 @@ import Questions from './componenets/Questions';
 import Form from './componenets/Form';
 import Main from './componenets/main'
 import { BrowserRouter, Route, Routes, NavLink, Navigate } from "react-router-dom"
+import JoinContest from './componenets/JoinContest';
 
 function App() {
  
@@ -25,13 +26,7 @@ function App() {
       {stat === "" && p === "" ?
      
      </div>:
-      <div>
-        <label> Provide code</label>
-        <input type="text" 
-          value={name}
-          onChange={(e) => setName(e.target.value)}></input>
     
-      </div>
       }
     
        
@@ -41,7 +36,7 @@ function App() {
     <Route path="/" element={<Main/>}/>
       <Route path="/lockout-bot/create-contest" element={<Form/>}/>
       <Route path="/lockout-bot/questions" element={<Questions/>}/>
-      <Route path="/lockout-bot/questions" element={<Questions/>}/>
+      <Route path="/lockout-bot/join-contest" element={<JoinContest/>}/>
     </Routes>
     </BrowserRouter>
     </>

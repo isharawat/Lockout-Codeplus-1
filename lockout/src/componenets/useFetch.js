@@ -5,21 +5,20 @@ function useFetch(URL) {
 
 
   const abortCont = new AbortController();
-  
+  const fetchUserData = () => {
+    fetch(URL)
+      .then(response => {
+        return response.json()
+      })
+      .then(results => {
+        setArticles(results.result.problems);
+      }).catch(err => {
+        console.log(err.message);
+      })
+  }
+
   useEffect(() => {
-   fetch(URL)
-     .then(res => res.json())
-     .then(
-       (results) => {
-         const articles = results.result.problems;
-         
-         setArticles(articles);
- 
-       })
-       .catch(err=>{
-           console.log(err.message);
-       })
-       return ()=> abortCont.abort();
+    fetchUserData()
  }, [URL])
  return articles;
 }

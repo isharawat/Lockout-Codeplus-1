@@ -1,11 +1,27 @@
-import React, { useEffect } from 'react'
-import useFetch from './useFetch'
+import React, { useEffect, useState } from 'react'
+
 import Componen from './Component';
+import Axios from "axios";
+import { useNavigate } from 'react-router-dom';
+const Questions = ({codes,rating}) => {
+  const [total, setTotal] = useState([]);
+  const history=useNavigate();
+  const fetchUserData = () => {
+    fetch("https://codeforces.com/api/problemset.problems?tags=implementation")
+      .then(response => {
+        return response.json()
+      })
+      .then(results => {
+        setTotal(results.result.problems);
+      }).catch(err => {
+        console.log(err.message);
+      })
+  }
 
-const Questions = ({r,rating}) => {
-
-  const questions = useFetch("https://codeforces.com/api/problemset.problems?tags=implementation")
-  const total = [];
+  useEffect(() => {
+    fetchUserData()
+ }, [URL])
+  
   const x = {
     800: [], 
     900: [], 
@@ -37,19 +53,17 @@ const Questions = ({r,rating}) => {
     3500: [], 
   };
 
-  for(let q in questions) {
-    let p = questions[q].rating;
-    total.push(questions[q]);
-  
+  for(let q in total) {
+    let p = total[q].rating;
+    
     let pstr = String(p);
     if(x[pstr]) {
-      x[pstr].push(questions[q]);  
+      x[pstr].push(total[q]);  
     }
     else {
       //console.log(questions[q]);
     }
   }
- // console.log(x);
   const allratings = rating;
   const final=[]
   for(let ratings in allratings) {
@@ -58,22 +72,62 @@ const Questions = ({r,rating}) => {
       const xlen = x[pstr].length;
       const y = Math.floor((Math.random()*xlen*100 )%xlen);
       const result = x[pstr][y];
-      final.push(result);
+      if(result){
+        const res = {
+          url : "https://codeforces.com/problemset/problem/" + result.contestId + "/" + result.index,
+          rating : result.rating,
+          name: result.name,
+          points: result.points
+        }
+        final.push(res);
+      }
     }
   }
-const val={
-  code:r,
-  questions
-}
+  useEffect(() => {
+      if(final.length){
+        postQues()
+       history("/lockout-bot/join-contest")
+      }
+    }, [final])
+  const postQues = async ()=>{
+    const  headers = {
+      'Content-Type': 'application/json',
+    }
+    const request = {
+      code: codes,
+      questions: final
+    }
+   try{
+    const response = await Axios.post("http://localhost:3001/lockoutbot/add-contest",request,{headers}) 
+    console.log(response);
+   }
+   catch(error){
+    console.log(error);
+   }
+  }
+  const addQustions= async() =>{
+    
+    const  headers = {
+      'Content-Type': 'application/json',
+    }
+      const request={
+        code:codes
+      }
+      console.log(request);
+      
+      await Axios.get("http://localhost:3001/lockoutbot/verifycontest",request,{headers}).then((res) => {     
+        
+      console.log(res);
+
+      }).catch(err=>{
+        console.log(err);
+      });
+  }
+  
   
   return (
     <>
-      {
-      final.map((obj) => ( 
-       <> 
-        <Componen key = {obj.contestId + obj.index} obj = {obj}/>
-     </> 
-     ))}
+      
        
     </>
 

@@ -6,7 +6,7 @@ const Main = () => {
          <NavLink to="/lockout-bot/create-contest">
          <button >Create contest</button>
          </NavLink>
-             <NavLink>
+             <NavLink to="/lockout-bot/join-contest">
              <button >Join contest</button>
              </NavLink>
     </div>
