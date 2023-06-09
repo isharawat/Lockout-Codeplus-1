@@ -6,6 +6,7 @@ import Form from './componenets/Form';
 import Main from './componenets/main'
 import { BrowserRouter, Route, Routes, NavLink, Navigate } from "react-router-dom"
 import JoinContest from './componenets/JoinContest';
+import Submission from './componenets/Submission';
 
 function App() {
  
@@ -37,6 +38,7 @@ function App() {
       <Route path="/lockout-bot/create-contest" element={<Form/>}/>
       <Route path="/lockout-bot/questions" element={<Questions/>}/>
       <Route path="/lockout-bot/join-contest" element={<JoinContest/>}/>
+      <Route path="/userinfo" element={<Submission/>}/>
     </Routes>
     </BrowserRouter>
     </>

@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom';
 const Questions = ({codes,rating}) => {
   const [total, setTotal] = useState([]);
   const history=useNavigate();
+  const user={
+    codeForces:"_IMMORTAL__"
+  }
   const fetchUserData = () => {
     fetch("https://codeforces.com/api/problemset.problems?tags=implementation")
       .then(response => {
@@ -73,6 +76,10 @@ const Questions = ({codes,rating}) => {
       const y = Math.floor((Math.random()*xlen*100 )%xlen);
       const result = x[pstr][y];
       if(result){
+     
+        if(!result.points){
+          result.points=500
+        }
         const res = {
           url : "https://codeforces.com/problemset/problem/" + result.contestId + "/" + result.index,
           rating : result.rating,
@@ -95,6 +102,7 @@ const Questions = ({codes,rating}) => {
     }
     const request = {
       code: codes,
+      admin: user.codeForces,
       questions: final
     }
    try{

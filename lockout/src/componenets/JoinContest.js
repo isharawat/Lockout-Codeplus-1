@@ -1,16 +1,21 @@
 import React, { useState } from 'react'
 import Axios from "axios";
 import Componen from './Component';
+import { NavLink } from 'react-router-dom';
+import Timer from './Timer';
 const JoinContest = () => {
     const [final, setFinal] = useState([]);
     const [codes, setCodes] = useState("");
-
+ const user={
+        codeForces:"_IMMORTAL__"
+      }
  
     const addQustions= async() =>{
-   
+     
         const  headers = {
           'Content-Type': 'application/json',
         }
+        let news="false";
         const finale = codes;
           const request={
             code: finale
@@ -21,10 +26,30 @@ const JoinContest = () => {
             console.log(request);
            const res=await Axios.post("http://localhost:3001/lockoutbot/verifycontest",request,{headers})
            setFinal(res.data.data.code[0].questions);
-           console.log(final);
+           const oldUsers=res.data.data.code[0].user
+          
+           for(let a in oldUsers){
+             if(oldUsers[a].codeForces===user.codeForces)news="true";
+           }
+           console.log(news);
+          if(news==="false"){
+            oldUsers.push({
+              codeForces:user.codeForces,
+              points:0
+             })
+             localStorage.setItem("code",finale)
+             const values={
+              code:res.data.data.code[0].code,
+              questions:res.data.data.code[0].questions,
+              user:oldUsers
+             }
+             const update= await Axios.patch(`http://localhost:3001/lockoutbot/update-user/${res.data.data.code[0]._id}`,values,{headers})
+          
+             console.log(update);
+          }
         }catch(err){
             console.log("ye h err",err);
-            alert("Invalid Code")
+            alert("Invalid Code ")
           };
       }
       const handleClick = (e)=>{
@@ -52,13 +77,22 @@ const JoinContest = () => {
     </form>
        
   </div>:
-    <div>{
+ 
+    <div> <Timer ques={final}/>{
+      
         final.map((obj) => ( 
          <> 
          
           <Componen key = {obj._id} obj = {obj}/>
        </> 
-       ))}</div>}
+       ))}</div>
+       
+       }
+       <div>
+        <NavLink to="/userinfo">
+        <button>End Contest</button>
+        </NavLink>
+       </div>
     </>
   )
 }
