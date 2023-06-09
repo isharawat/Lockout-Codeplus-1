@@ -19,15 +19,14 @@ router.post('/add-contest', async(req,res) => {
     }
   })
   
-  router.get('/verifycontest',  async (req,res) => {
-    const newCode= await Data.find(req.body);
+  router.post('/verifycontest',  async (req,res) => {
+
+    console.log(req.body);
+    const newCode= await Data.find({code:req.body.code});
     try{
-        if(newCode == "") {
+        if(newCode=="") {
             res.status(401).json({
                 status: 'Code not found',
-                data : {
-                  code: newCode,
-                }
             })
         }
       
@@ -45,7 +44,25 @@ router.post('/add-contest', async(req,res) => {
       })
   }
   })
-  
+  router.patch('/update-user/:id',async(req,res)=>{
+    try {
+      const newData= await Data.findByIdAndUpdate(req.params.id,req.body,{
+        new:true,
+        runValidators:true
+      })
+      res.status(200).json({
+        status:"Updated",
+        data:newData
+      })
+    }
+    catch(err){
+     res.status(500).json({
+        status:"Got Error",
+        error:err
+     })
+    }
+    
+  })
   router.delete('/delete-contest',  async(req,res) => {
     await Data.deleteOne(req.body)
     
